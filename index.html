@@ -12,36 +12,27 @@
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+    <div class="login-screen">
+        <img src="img/logo.png" alt="Logo Bate-Papo UOL">
+        <input type="text" name="user-login" placeholder="Digite seu nome" data-identifier="enter-name" />
+        <button data-identifier="start">Entrar</button>
+    </div>
+
     <header>
         <img src="img/logo.png" alt="Logo Bate-Papo UOL">
         <ion-icon name="people"></ion-icon>
     </header>
-    <main>
-        <!-- TESTE -->
-        <div class="msg-box msg-status">
-            <div class="msg-time">00:00:00</div>
-            <div class="msg-user">João</div>
-            <div class="msg-txt">entrou na sala</div>
-        </div>
-        <div class="msg-box msg-reserv">
-            <div class="msg-time">00:00:00</div>
-            <div class="msg-user">João</div>
-            <div class="msg-txt">entrou na sala</div>
-        </div>
-        <div class="msg-box msg-normal">
-            <div class="msg-time">00:00:00</div>
-            <div class="msg-user">João</div>
-            <div class="msg-txt">entrou na sala</div>
-        </div>
-    </main>
+
+    <main></main>
 
     <div class="send-container" >
-        <input type="text" placeholder="Escreva aqui...">
+        <input type="text" name="msg-input" placeholder="Escreva aqui..." />
         <ion-icon name="paper-plane-outline"></ion-icon>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

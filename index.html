@@ -22,7 +22,7 @@
         <div  class="dark-layer" onclick="closeSidebar(this)"></div>
         <aside>
             <p class="sidebar-title">Escolha um contato<br>enviar mensagem:</p>
-            <nav>
+            <nav id="nav-contacts">
                 <li>
                     <ion-icon class="contacts-icon" name="people" alt="Todos"></ion-icon>
                     <p class="sidebar-list">Todos</p>
@@ -30,7 +30,7 @@
                 </li>
             </nav>
             <p class="sidebar-title">Escolha a visibilidade:</p>
-            <nav>
+            <nav id="nav-status">
                 <li>
                     <ion-icon class="lock-open" name="lock-open" alt="Público"></ion-icon>
                     <p class="sidebar-list">Público</p>
@@ -56,7 +56,7 @@
         <input type="text" name="msg-input" placeholder="Escreva aqui..."/>
         <ion-icon name="paper-plane-outline" onclick="setMessage()"></ion-icon>
     </div>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule="" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>

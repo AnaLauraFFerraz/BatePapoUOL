@@ -47,21 +47,14 @@ function printAllMessages(messagesList) {
     for (let i = 0; i < messagesList.length; i++) {
         if (messagesList[i].type === "status") {
             txt += `<div class="msg-box msg-status">
-                <span class="msg-time">(${messagesList[i].time} )</span> 
-                <span class="msg-user">${messagesList[i].from} </span> 
-                <span class="msg-text">${messagesList[i].text}</span>
+                <span class="msg-time">(${messagesList[i].time})&nbsp</span> <span class="msg-user">${messagesList[i].from}&nbsp</span> <span class="msg-text">${messagesList[i].text}</span>
             </div>`            
         } else if (messagesList[i].type === "message") {
-            txt += `<div class="msg-box msg-normal">
-                <span class="msg-time">(${messagesList[i].time}) </span> 
-                <span class="msg-user">${messagesList[i].from} </span> para 
-                <span class="msg-user">${messagesList[i].to} </span> 
-                <span class="msg-text">${messagesList[i].text}</span>
+            txt += `<div class="msg-box msg-normal"><span class="msg-time">(${messagesList[i].time})&nbsp</span> <span class="msg-user">${messagesList[i].from}&nbsp</span> para <span class="msg-user">&nbsp${messagesList[i].to}&nbsp</span> <span class="msg-text">${messagesList[i].text}</span>
             </div>`
         } else if (messagesList[i].type === "private-message" && messagesList.to === userName) {
-            txt += `<div class="msg-box msg-reserv"><p>
-                <span class="msg-time">(${messagesList[i].time})</span> <span class="msg-user">${messagesList[i].from} </span> para <span class="msg-user">${messagesList[i].to}</span> ${messagesList[i].text}
-            </p></div>`
+            txt += `<div class="msg-box msg-reserv">
+            <p><span class="msg-time">(${messagesList[i].time})&nbsp</span> <span class="msg-user">${messagesList[i].from}&nbsp</span> para <span class="msg-user">&nbsp${messagesList[i].to}&nbsp</span> ${messagesList[i].text} </p></div>`
         }
     }
     document.querySelector("main").innerHTML = txt;
@@ -69,16 +62,25 @@ function printAllMessages(messagesList) {
 }
 
 //document.querySelector('.login-screen button').addEventListener('click', setMessage());
+let msgTo = "Todos";
+let msgType = "message";
 
 function setMessage() {
+    
     let txtMessage = String(document.querySelector('input[name="msg-input"]').value);
     if (txtMessage !== "") {
         let msgData = {
             from: userName,
+            to: msgTo,
+            text: txtMessage,
+            type: msgType
+        }            
+        /*let msgData = {
+            from: userName,
             to: "Todos",
             text: txtMessage,
             type: "message"
-        }
+        }*/
         axios.post(urlsAPI.messages, msgData)
             .then(() => {
                 document.querySelector('input[name="msg-input"]').value = "";
@@ -95,27 +97,29 @@ function setMessage() {
 let participantsList = [];
 
 function getParticipants() {
-    let participantsTxt = "";
     axios.get(urlsAPI.participants)
-        .then((response) => {
-            console.log("getParticipants() WORKING");
-            participantsList = response.data;
-            
-            for (let j = 0; j< participantsList.length; j++) {
-                participantsTxt += `
-                <li>
-                    <ion-icon class="contacts-icon" name="person-circle" alt="Público"></ion-icon>
-                    <p class="sidebar-list">${participantsTxt[j].name}</p>
-                    <ion-icon class="visibility-icon no-display" src="img/check.svg"></ion-icon>
-                </li>`
-            }
-            document.querySelector('#nav-contacts').innerHTML += participantsTxt;
-        })
-        .catch(() => {
-            //window.location.reload()
-            console.log("getParticipants() not working");
-        });
-        
+    .then((response) => {
+        participantsList = response.data
+        printAllParticipants(participantsList)})
+    .catch(() => {
+        //window.location.reload()
+        console.log("getParticipants() not working");
+    });       
+}
+
+
+function printAllParticipants(participantsList) {
+    let participantsTxt = "";
+
+    for (let j = 0; j< participantsList.length; j++) {
+        participantsTxt += `
+        <li>
+            <ion-icon class="contacts-icon" name="person-circle" alt="Público"></ion-icon>
+            <p class="sidebar-list">${participantsList[j].name}</p>
+            <ion-icon class="visibility-icon no-display" src="img/check.svg"></ion-icon>
+        </li>`
+    }
+    document.querySelector('#nav-contacts').innerHTML += participantsTxt;
 }
 
 
@@ -149,6 +153,7 @@ function printParticipants(participantsList) {
 
 function openSidebar() {
     document.querySelector('#sidebar-active').classList.remove('no-display');
+    getParticipants();
 }
 function closeSidebar(element) {
     element.parentNode.classList.add('no-display');
@@ -172,10 +177,9 @@ function postStatus () {
 
 setInterval(() => {
     axios.get(urlsAPI.participants)
-    //.then((response) => console.log(response.name))
+    .then((response) => participantsList = response.data)
     .catch(() => {
         //window.location.reload()
         console.log(" NOT WORKING: get participants set interval")
     });
 }, 10000);
-//"WORKING: get participants set interval"

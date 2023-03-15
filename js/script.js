@@ -1,5 +1,3 @@
-//window.onload = userLogin();
-
 const urlsAPI = {
     participants: "https://mock-api.driven.com.br/api/v6/uol/participants",
     messages: "https://mock-api.driven.com.br/api/v6/uol/messages",
@@ -8,25 +6,22 @@ const urlsAPI = {
 
 let userName = "";
 
-//document.querySelector('.login-screen button').addEventListener('click', userLogin());
-
 function userLogin() {
     userName = document.querySelector('input[name="user-login"]').value;
     if (userName !== "") {
         startChat(userName);
-    } 
+    }
 }
 
 function startChat(userName) {
     axios.post(urlsAPI.participants, { name: userName })
-    .then(() => {
-        document.querySelector('.login-screen').classList.add('no-display');
-    })
-    .catch(() => {
-        console.log("err startChat");
-        //window.location.reload()
-    });
-    //Tela de carregamento
+        .then(() => {
+            document.querySelector('.login-screen').classList.add('no-display');
+        })
+        .catch(() => {
+            window.location.reload()
+        });
+
     postStatus();
     getMessagesInterval();
 }
@@ -39,7 +34,7 @@ function getMessages() {
             messagesList = response.data;
             printAllMessages(messagesList);
         })
-        .catch(() => {console.log("erro ao pegar mensagens")})
+        .catch(() => { console.log("erro ao pegar mensagens") })
 }
 
 function printAllMessages(messagesList) {
@@ -48,7 +43,7 @@ function printAllMessages(messagesList) {
         if (messagesList[i].type === "status") {
             txt += `<div class="msg-box msg-status">
                 <span class="msg-time">(${messagesList[i].time})&nbsp</span> <span class="msg-user">${messagesList[i].from}&nbsp</span> <span class="msg-text">${messagesList[i].text}</span>
-            </div>`            
+            </div>`
         } else if (messagesList[i].type === "message") {
             txt += `<div class="msg-box msg-normal"><span class="msg-time">(${messagesList[i].time})&nbsp</span> <span class="msg-user">${messagesList[i].from}&nbsp</span> para <span class="msg-user">&nbsp${messagesList[i].to}&nbsp</span> <span class="msg-text">${messagesList[i].text}</span>
             </div>`
@@ -58,15 +53,14 @@ function printAllMessages(messagesList) {
         }
     }
     document.querySelector("main").innerHTML = txt;
-    //document.querySelector("main").lastChild.scrollIntoView()
+    document.querySelector("main").lastChild.scrollIntoView()
 }
 
-//document.querySelector('.login-screen button').addEventListener('click', setMessage());
 let msgTo = "Todos";
 let msgType = "message";
 
 function setMessage() {
-    
+
     let txtMessage = String(document.querySelector('input[name="msg-input"]').value);
     if (txtMessage !== "") {
         let msgData = {
@@ -74,44 +68,36 @@ function setMessage() {
             to: msgTo,
             text: txtMessage,
             type: msgType
-        }            
-        /*let msgData = {
-            from: userName,
-            to: "Todos",
-            text: txtMessage,
-            type: "message"
-        }*/
+        }
         axios.post(urlsAPI.messages, msgData)
             .then(() => {
                 document.querySelector('input[name="msg-input"]').value = "";
             })
             .catch(() => {
-                console.log("erro postMessage()")
-                //window.location.reload()
-            }); 
+                window.location.reload()
+            });
     }
     getMessages();
 }
 
-//document.querySelector('#contacts-open').addEventListener('click', openSidebar());
 let participantsList = [];
 
 function getParticipants() {
     axios.get(urlsAPI.participants)
-    .then((response) => {
-        participantsList = response.data
-        printAllParticipants(participantsList)})
-    .catch(() => {
-        //window.location.reload()
-        console.log("getParticipants() not working");
-    });       
+        .then((response) => {
+            participantsList = response.data
+            printAllParticipants(participantsList)
+        })
+        .catch(() => {
+            window.location.reload()
+        });
 }
 
 
 function printAllParticipants(participantsList) {
     let participantsTxt = "";
 
-    for (let j = 0; j< participantsList.length; j++) {
+    for (let j = 0; j < participantsList.length; j++) {
         participantsTxt += `
         <li>
             <ion-icon class="contacts-icon" name="person-circle" alt="Público"></ion-icon>
@@ -122,39 +108,37 @@ function printAllParticipants(participantsList) {
     document.querySelector('#nav-contacts').innerHTML += participantsTxt;
 }
 
-
-/*
 function getParticipants() {
     axios.get(urlsAPI.participants)
         .then((response) => {
-            console.log("getParticipants() WORKING");
             participantsList = response.name;
             printParticipants(participantsList);
         })
         .catch(() => {
-            //window.location.reload()
-            console.log("getParticipants() not working");
+            // window.location.reload()
+            console.log("Error printing participants")
         });
 }
 
 function printParticipants(participantsList) {
     let participantsTxt = "";
-    for (let j = 0; j< participantsList.length; j++) {
+    for (let j = 0; j < participantsList.length; j++) {
         participantsTxt += `
         <li>
             <ion-icon class="contacts-icon" name="person-circle" alt="Público"></ion-icon>
             <p class="sidebar-list">${participantsTxt[j].name}</p>
             <ion-icon class="visibility-icon no-display" src="img/check.svg"></ion-icon>
-        </li>`
+        </li>
+        `
     }
     document.querySelector('#nav-contacts').innerHTML += participantsTxt;
 }
-*/
 
 function openSidebar() {
     document.querySelector('#sidebar-active').classList.remove('no-display');
     getParticipants();
 }
+
 function closeSidebar(element) {
     element.parentNode.classList.add('no-display');
 }
@@ -165,21 +149,19 @@ function getMessagesInterval() {
     }, 3000);
 }
 
-function postStatus () {
+function postStatus() {
     setInterval(() => {
-        axios.post(urlsAPI.status, {name: userName})
-        .catch(() => {
-            //window.location.reload()
-            console.log(" NOT WORKING: postStatus()")
-        })
+        axios.post(urlsAPI.status, { name: userName })
+            .catch(() => {
+                window.location.reload()
+            })
     }, 5000);
 }
 
 setInterval(() => {
     axios.get(urlsAPI.participants)
-    .then((response) => participantsList = response.data)
-    .catch(() => {
-        //window.location.reload()
-        console.log(" NOT WORKING: get participants set interval")
-    });
+        .then((response) => participantsList = response.data)
+        .catch(() => {
+            window.location.reload()
+        });
 }, 10000);
